@@ -1,0 +1,240 @@
+:root {
+  /* Brand */
+  --skin-accent:      #C53550;
+  --skin-dark:        #881E2F;
+  --skin-light:       #FDE7E8;
+  --skin-soft:        #F5BFC2;
+
+  /* Neutrals */
+  --skin-text:        #1A1417;
+  --skin-grey:        #6B6669;
+  --skin-grey-light:  #AAAAAA;
+  --skin-border:      #EEEEEE;
+  --skin-offwhite:    #FAFAFA;
+  --skin-white:       #FFFFFF;
+
+  /* Glassmorphism — only for overlays */
+  --glass-bg:         rgba(255, 255, 255, 0.80);
+  --glass-blur:       blur(16px);
+  --glass-border:     1px solid rgba(255, 255, 255, 0.60);
+  --glass-shadow:     0 8px 32px rgba(0, 0, 0, 0.08);
+  --glass-radius:     16px;
+
+  /* Typography */
+  --font-body:        'DM Sans', system-ui, sans-serif;
+  --font-heading:     'Cormorant Garamond', Georgia, serif;
+
+  /* Letter spacing */
+  --letter-spacing-wide:   0.15em;
+  --letter-spacing-wider:  0.25em;
+
+  /* Transitions */
+  --transition:       all 0.3s ease;
+}
+
+/* ─── Base Reset ─── */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: 15px;
+  line-height: 1.65;
+  color: var(--skin-text);
+  background-color: var(--skin-white);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  line-height: 1.15;
+  color: var(--skin-text);
+  margin: 0;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+p {
+  margin: 0;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+button {
+  cursor: pointer;
+  font-family: var(--font-body);
+}
+
+/* ─── Glassmorphism ─── */
+.glass-card {
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: var(--glass-border);
+  border-radius: var(--glass-radius);
+  box-shadow: var(--glass-shadow);
+}
+
+/* ─── Product Card ─── */
+.product-card {
+  background: var(--skin-white);
+  border: 1px solid var(--skin-border);
+  border-radius: 12px;
+  transition: var(--transition);
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.product-card:hover {
+  transform: scale(1.03);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.08);
+}
+
+/* ─── Labels ─── */
+.label-wide {
+  letter-spacing: var(--letter-spacing-wide);
+  text-transform: uppercase;
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: var(--skin-grey);
+  font-family: var(--font-body);
+}
+
+.label-wider {
+  letter-spacing: var(--letter-spacing-wider);
+  text-transform: uppercase;
+  font-size: 0.68rem;
+  font-weight: 500;
+  color: var(--skin-grey-light);
+  font-family: var(--font-body);
+}
+
+/* ─── Buttons ─── */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 2rem;
+  background: var(--skin-accent);
+  color: var(--skin-white);
+  border: none;
+  border-radius: 4px;
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: var(--letter-spacing-wide);
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: var(--transition);
+  white-space: nowrap;
+}
+
+.btn-primary:hover {
+  background: var(--skin-dark);
+}
+
+.btn-outline {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 2rem;
+  background: transparent;
+  color: var(--skin-text);
+  border: 1px solid var(--skin-text);
+  border-radius: 4px;
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: var(--letter-spacing-wide);
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: var(--transition);
+  white-space: nowrap;
+}
+
+.btn-outline:hover {
+  background: var(--skin-text);
+  color: var(--skin-white);
+}
+
+.btn-outline-accent {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 2rem;
+  background: transparent;
+  color: var(--skin-accent);
+  border: 1px solid var(--skin-accent);
+  border-radius: 4px;
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: var(--letter-spacing-wide);
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: var(--transition);
+  white-space: nowrap;
+}
+
+.btn-outline-accent:hover {
+  background: var(--skin-accent);
+  color: var(--skin-white);
+}
+
+/* ─── Layout Utilities ─── */
+.container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+.section-padding {
+  padding: 5rem 0;
+}
+
+.main-content {
+  flex: 1;
+}
+
+/* ─── PrimeVue overrides ─── */
+.p-menubar {
+  border: none !important;
+  border-radius: 0 !important;
+  background: var(--skin-white) !important;
+  padding: 0 !important;
+  box-shadow: none !important;
+}
+
+.p-select-button .p-button {
+  font-family: var(--font-body) !important;
+  font-size: 0.72rem !important;
+  letter-spacing: var(--letter-spacing-wide) !important;
+  text-transform: uppercase !important;
+}
+
+/* ─── Responsive ─── */
+@media (max-width: 768px) {
+  .container {
+    padding: 0 1rem;
+  }
+
+  .section-padding {
+    padding: 3rem 0;
+  }
+}
