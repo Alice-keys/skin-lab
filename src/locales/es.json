@@ -1,0 +1,85 @@
+{
+  "announcement": {
+    "message": "ENVÍO GRATIS EN PEDIDOS MAYORES DE $50  ·  USA SKINLAB10 PARA 10% DE DESCUENTO EN TU PRIMER PEDIDO"
+  },
+  "nav": {
+    "shop": "Tienda",
+    "categories": "Categorías",
+    "about": "Nosotros",
+    "search": "Buscar",
+    "wishlist": "Favoritos",
+    "cart": "Carrito",
+    "account": "Mi Cuenta",
+    "login": "Iniciar Sesión",
+    "register": "Registrarse",
+    "logout": "Cerrar Sesión",
+    "admin": "Panel Admin"
+  },
+  "landing": {
+    "hero-eyebrow": "Nueva Colección",
+    "hero-title": "Skincare Respaldado por la Ciencia",
+    "hero-subtitle": "Fórmulas limpias. Resultados visibles.",
+    "shop-now": "Comprar Ahora",
+    "discover": "Descubrir",
+    "featured-title": "Nuevos Productos",
+    "bestsellers-title": "Más Vendidos",
+    "categories-title": "Comprar por Categoría",
+    "promo-title": "Tu Piel Merece lo Mejor",
+    "promo-subtitle": "Formulado con ingredientes respaldados por la ciencia para resultados reales y visibles. Sin compromisos.",
+    "promo-cta": "Explorar Ingredientes",
+    "ingredients-title": "Lo que Contiene Importa",
+    "ingredients-subtitle": "Cada ingrediente tiene un propósito. Solo usamos lo que funciona.",
+    "testimonials-title": "Resultados Reales"
+  },
+  "about": {
+    "title": "Acerca de Skin Lab",
+    "subtitle": "Nuestra Historia",
+    "intro": "Creemos que una gran piel comienza con una gran ciencia.",
+    "mission": "Cada fórmula de Skin Lab está elaborada con ingredientes cuidadosamente seleccionados y probados clínicamente. Estamos comprometidos con la transparencia, la sostenibilidad y los resultados que realmente se ven.",
+    "values-title": "Nuestros Valores",
+    "clean": "Belleza Limpia",
+    "clean-desc": "Libre de ingredientes dañinos. Siempre.",
+    "science": "La Ciencia Primero",
+    "science-desc": "Cada ingrediente tiene un propósito y evidencia científica.",
+    "sustainable": "Sostenible",
+    "sustainable-desc": "Amable con tu piel y con el planeta."
+  },
+  "footer": {
+    "tagline": "Skincare Respaldado por la Ciencia",
+    "shop": "Tienda",
+    "skincare": "Skincare",
+    "serums": "Sueros",
+    "moisturizers": "Hidratantes",
+    "cleansers": "Limpiadores",
+    "spf": "Protector Solar",
+    "bundles": "Kits",
+    "customer-service": "Soporte",
+    "faq": "Preguntas Frecuentes",
+    "shipping": "Envíos y Devoluciones",
+    "contact": "Contáctanos",
+    "track-order": "Rastrear Pedido",
+    "follow": "Síguenos",
+    "newsletter-title": "Únete al Lab",
+    "newsletter-subtitle": "Consejos de skincare, ofertas exclusivas y acceso anticipado a nuevos lanzamientos.",
+    "newsletter-placeholder": "Tu correo electrónico",
+    "subscribe": "Suscribirse",
+    "copyright": "© 2026 Skin Lab. Todos los derechos reservados."
+  },
+  "science": {
+    "label":    "LA CIENCIA",
+    "title":    "Tu Piel Merece lo Mejor",
+    "subtitle": "Formulado con ingredientes respaldados por la ciencia para resultados reales y visibles.",
+    "cta":      "Explorar Ingredientes"
+  },
+  "common": {
+    "add-to-cart": "Añadir al Carrito",
+    "add-to-wishlist": "Añadir a Favoritos",
+    "view-all": "Ver Todo",
+    "coming-soon": "Próximamente",
+    "loading": "Cargando...",
+    "new": "Nuevo",
+    "bestseller": "Más Vendido",
+    "out-of-stock": "Agotado",
+    "in-stock": "En Stock"
+  }
+}

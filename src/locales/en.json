@@ -1,0 +1,85 @@
+{
+  "announcement": {
+    "message": "FREE SHIPPING ON ORDERS OVER $50  ·  USE CODE SKINLAB10 FOR 10% OFF YOUR FIRST ORDER"
+  },
+  "nav": {
+    "shop": "Shop",
+    "categories": "Categories",
+    "about": "About",
+    "search": "Search",
+    "wishlist": "Wishlist",
+    "cart": "Cart",
+    "account": "Account",
+    "login": "Login",
+    "register": "Register",
+    "logout": "Logout",
+    "admin": "Admin Panel"
+  },
+  "landing": {
+    "hero-eyebrow": "New Collection",
+    "hero-title": "Science-Backed Skincare",
+    "hero-subtitle": "Clean formulas. Visible results.",
+    "shop-now": "Shop Now",
+    "discover": "Discover",
+    "featured-title": "New Arrivals",
+    "bestsellers-title": "Bestsellers",
+    "categories-title": "Shop by Category",
+    "promo-title": "Your Skin Deserves the Best",
+    "promo-subtitle": "Formulated with science-backed ingredients for real, visible results. No compromise.",
+    "promo-cta": "Explore Ingredients",
+    "ingredients-title": "What's Inside Matters",
+    "ingredients-subtitle": "Every ingredient has a purpose. We only use what works.",
+    "testimonials-title": "Real Results"
+  },
+  "about": {
+    "title": "About Skin Lab",
+    "subtitle": "Our Story",
+    "intro": "We believe great skin starts with great science.",
+    "mission": "Every formula at Skin Lab is crafted with carefully selected, clinically-tested ingredients. We are committed to transparency, sustainability, and results you can actually see.",
+    "values-title": "Our Values",
+    "clean": "Clean Beauty",
+    "clean-desc": "Free from harmful ingredients. Always.",
+    "science": "Science-First",
+    "science-desc": "Every ingredient has a purpose and proof behind it.",
+    "sustainable": "Sustainable",
+    "sustainable-desc": "Kind to your skin and kind to the planet."
+  },
+  "footer": {
+    "tagline": "Science-Backed Skincare",
+    "shop": "Shop",
+    "skincare": "Skincare",
+    "serums": "Serums",
+    "moisturizers": "Moisturizers",
+    "cleansers": "Cleansers",
+    "spf": "SPF",
+    "bundles": "Bundles",
+    "customer-service": "Support",
+    "faq": "FAQ",
+    "shipping": "Shipping & Returns",
+    "contact": "Contact Us",
+    "track-order": "Track Order",
+    "follow": "Follow Us",
+    "newsletter-title": "Join the Lab",
+    "newsletter-subtitle": "Skincare tips, exclusive offers, and early access to new launches.",
+    "newsletter-placeholder": "Your email address",
+    "subscribe": "Subscribe",
+    "copyright": "© 2026 Skin Lab. All rights reserved."
+  },
+  "science": {
+    "label":    "THE SCIENCE",
+    "title":    "Your Skin Deserves the Best",
+    "subtitle": "Formulated with science-backed ingredients for real, visible results. No compromise.",
+    "cta":      "Explore Ingredients"
+  },
+  "common": {
+    "add-to-cart": "Add to Cart",
+    "add-to-wishlist": "Add to Wishlist",
+    "view-all": "View All",
+    "coming-soon": "Coming Soon",
+    "loading": "Loading...",
+    "new": "New",
+    "bestseller": "Bestseller",
+    "out-of-stock": "Out of Stock",
+    "in-stock": "In Stock"
+  }
+}
