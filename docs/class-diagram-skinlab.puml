@@ -1,0 +1,716 @@
+@startuml
+
+' ─────────────────────────────────────────────────────────
+' BOUNDED CONTEXT: catalog
+' US003: Browse by Category  US004: Filter & Sort
+' US005: Search Products     US006: Product Detail
+' US015: Manage Products     US016: Manage Categories
+' ─────────────────────────────────────────────────────────
+
+package "catalog.domain.model" {
+  class Product {
+    - id: string
+    - name: string
+    - description: string
+    - price: number
+    - stock: number
+    - images: string[]
+    - ingredients: string[]
+    - skinTypes: string[]
+    - tag: string
+    - isNew: boolean
+    - rating: number
+    - reviewCount: number
+    - category: Category
+    + isInStock(): boolean
+    + getFormattedPrice(): string
+    + getAverageRating(): number
+  }
+  class Category {
+    - id: string
+    - name: string
+    - description: string
+    - imageUrl: string
+    - productCount: number
+  }
+  class Review {
+    - id: string
+    - customerId: string
+    - customerName: string
+    - rating: number
+    - comment: string
+    - createdAt: Date
+    + getFormattedDate(): string
+  }
+  class ProductFilter {
+    - categoryId: string
+    - sortBy: string
+    - minPrice: number
+    - maxPrice: number
+    - skinType: string
+    + apply(products: Product[]): Product[]
+    + reset(): void
+  }
+}
+
+package "catalog.application" {
+  class catalogStore {
+    - products: Product[]
+    - categories: Category[]
+    - selectedCategory: Category
+    - activeFilter: ProductFilter
+    - searchQuery: string
+    - isLoading: boolean
+    + fetchProducts(): void
+    + fetchCategories(): void
+    + filterByCategory(category: Category): void
+    + applyFilter(filter: ProductFilter): void
+    + searchProducts(query: string): void
+    + fetchProductById(id: string): void
+  }
+}
+
+package "catalog.infrastructure" {
+  class ProductApi {
+    + getAll(): Promise
+    + getById(id: string): Promise
+    + getByCategory(categoryId: string): Promise
+    + search(query: string): Promise
+    + create(data: object): Promise
+    + update(id: string, data: object): Promise
+    + delete(id: string): Promise
+  }
+  class CategoryApi {
+    + getAll(): Promise
+    + create(data: object): Promise
+    + update(id: string, data: object): Promise
+    + delete(id: string): Promise
+  }
+  class ProductAssembler {
+    + toEntityFromResource(resource: object): Product
+    + toEntitiesFromResponse(response: object): Product[]
+  }
+  class CategoryAssembler {
+    + toEntityFromResource(resource: object): Category
+    + toEntitiesFromResponse(response: object): Category[]
+  }
+}
+
+package "catalog.presentation.components" {
+  class ProductList {
+    - products: Product[]
+    - isLoading: boolean
+    + onMounted(): void
+  }
+  class ProductItem {
+    - product: Product
+    + emitAddToCart(): void
+    + emitAddToWishlist(): void
+    + addToCart(): void <<event>>
+    + addToWishlist(): void <<event>>
+  }
+  class ProductDetail {
+    - product: Product
+    - selectedQuantity: number
+    - activeImageIndex: number
+    - reviews: Review[]
+    + addToCart(): void
+    + addToWishlist(): void
+    + changeImage(index: number): void
+    + onMounted(): void
+  }
+  class CategoryList {
+    - categories: Category[]
+    - selectedCategory: Category
+    + emitCategorySelected(): void
+    + categorySelected(): void <<event>>
+  }
+  class CategoryItem {
+    - category: Category
+    + emitCategorySelected(): void
+    + categorySelected(): void <<event>>
+  }
+  class ProductFilterBar {
+    - activeFilter: ProductFilter
+    + emitFilterChanged(): void
+    + filterChanged(): void <<event>>
+  }
+  class SearchBar {
+    - query: string
+    + emitSearchSubmitted(): void
+    + searchSubmitted(): void <<event>>
+  }
+  class AdminProductList {
+    - products: Product[]
+    - isLoading: boolean
+    + onMounted(): void
+  }
+  class AdminProductItem {
+    - product: Product
+    + emitEditProduct(): void
+    + emitDeleteProduct(): void
+    + editProduct(): void <<event>>
+    + deleteProduct(): void <<event>>
+  }
+  class AdminProductForm {
+    - product: Product
+    - isEditing: boolean
+    + save(): void
+    + cancel(): void
+    + emitProductSaved(): void
+    + productSaved(): void <<event>>
+  }
+  class AdminCategoryList {
+    - categories: Category[]
+    + onMounted(): void
+  }
+  class AdminCategoryItem {
+    - category: Category
+    + emitEditCategory(): void
+    + emitDeleteCategory(): void
+    + editCategory(): void <<event>>
+    + deleteCategory(): void <<event>>
+  }
+  class AdminCategoryForm {
+    - category: Category
+    - isEditing: boolean
+    + save(): void
+    + cancel(): void
+    + emitCategorySaved(): void
+    + categorySaved(): void <<event>>
+  }
+}
+
+' ─────────────────────────────────────────────────────────
+' BOUNDED CONTEXT: cart
+' US008: Manage Shopping Cart
+' ─────────────────────────────────────────────────────────
+
+package "cart.domain.model" {
+  class ShoppingCart {
+    - id: string
+    - customerId: string
+    - items: CartItem[]
+    - discountCode: string
+    - discountAmount: number
+    + addItem(product: Product, qty: number): void
+    + removeItem(productId: string): void
+    + updateQuantity(productId: string, qty: number): void
+    + applyDiscountCode(code: string): boolean
+    + getSubtotal(): number
+    + getTax(): number
+    + getTotal(): number
+    + getItemCount(): number
+    + clear(): void
+  }
+  class CartItem {
+    - product: Product
+    - quantity: number
+    - unitPrice: number
+    + getSubtotal(): number
+    + increaseQty(): void
+    + decreaseQty(): void
+  }
+}
+
+package "cart.application" {
+  class cartStore {
+    - cart: ShoppingCart
+    + addToCart(product: Product, qty: number): void
+    + removeFromCart(productId: string): void
+    + updateQuantity(productId: string, qty: number): void
+    + applyDiscountCode(code: string): void
+    + clearCart(): void
+    + getItemCount(): number
+  }
+}
+
+package "cart.presentation.components" {
+  class CartList {
+    - cart: ShoppingCart
+    - discountInput: string
+    + applyDiscount(): void
+    + proceedToCheckout(): void
+    + onMounted(): void
+  }
+  class CartLineItem {
+    - item: CartItem
+    + emitQuantityChanged(): void
+    + emitItemRemoved(): void
+    + quantityChanged(): void <<event>>
+    + itemRemoved(): void <<event>>
+  }
+  class CartSummary {
+    - cart: ShoppingCart
+    + proceedToCheckout(): void
+  }
+}
+
+' ─────────────────────────────────────────────────────────
+' BOUNDED CONTEXT: checkout
+' US009: Complete Checkout   US010: Track Orders
+' ─────────────────────────────────────────────────────────
+
+package "checkout.domain.model" {
+  class Order {
+    - id: string
+    - orderNumber: string
+    - customerId: string
+    - items: OrderItem[]
+    - shippingAddress: Address
+    - status: string
+    - subtotal: number
+    - tax: number
+    - total: number
+    - createdAt: Date
+    - estimatedDelivery: Date
+    + getFormattedDate(): string
+    + getStatusLabel(): string
+    + getFormattedTotal(): string
+  }
+  class OrderItem {
+    - productId: string
+    - productName: string
+    - productImage: string
+    - quantity: number
+    - unitPrice: number
+    + getSubtotal(): number
+  }
+  class Address {
+    - street: string
+    - city: string
+    - state: string
+    - zipCode: string
+    - country: string
+    + getFullAddress(): string
+  }
+}
+
+package "checkout.application" {
+  class checkoutStore {
+    - currentOrder: Order
+    - orderHistory: Order[]
+    - isLoading: boolean
+    + placeOrder(cart: ShoppingCart, address: Address): void
+    + fetchOrderHistory(customerId: string): void
+    + trackOrder(orderId: string): void
+  }
+}
+
+package "checkout.infrastructure" {
+  class OrderApi {
+    + create(data: object): Promise
+    + getByCustomerId(customerId: string): Promise
+    + getById(orderId: string): Promise
+  }
+  class OrderAssembler {
+    + toEntityFromResource(resource: object): Order
+    + toEntitiesFromResponse(response: object): Order[]
+  }
+}
+
+package "checkout.presentation.components" {
+  class CheckoutForm {
+    - address: Address
+    - paymentMethod: string
+    - cart: ShoppingCart
+    + submitOrder(): void
+    + onMounted(): void
+  }
+  class OrderConfirmation {
+    - order: Order
+    + continueShopping(): void
+  }
+  class OrderList {
+    - orders: Order[]
+    - isLoading: boolean
+    + onMounted(): void
+  }
+  class OrderLineItem {
+    - order: Order
+    + viewDetail(): void
+    + emitTrackOrder(): void
+    + trackOrder(): void <<event>>
+  }
+}
+
+' ─────────────────────────────────────────────────────────
+' BOUNDED CONTEXT: identity
+' US011: Manage Customer Account   US017: Manage Admin Account
+' ─────────────────────────────────────────────────────────
+
+package "identity.domain.model" {
+  class Customer {
+    - id: string
+    - name: string
+    - email: string
+    - phone: string
+    - address: Address
+    - createdAt: Date
+    + getFullName(): string
+  }
+  class Admin {
+    - id: string
+    - name: string
+    - email: string
+    - role: string
+    + getFullName(): string
+  }
+}
+
+package "identity.application" {
+  class authStore {
+    - currentCustomer: Customer
+    - currentAdmin: Admin
+    - isAuthenticated: boolean
+    - isAdmin: boolean
+    + login(email: string, password: string): void
+    + register(data: object): void
+    + loginAdmin(email: string, password: string): void
+    + logout(): void
+    + updateProfile(data: object): void
+    + changePassword(oldPwd: string, newPwd: string): void
+  }
+}
+
+package "identity.infrastructure" {
+  class AuthApi {
+    + login(email: string, password: string): Promise
+    + register(data: object): Promise
+    + loginAdmin(email: string, password: string): Promise
+    + updateProfile(id: string, data: object): Promise
+    + changePassword(id: string, data: object): Promise
+  }
+  class CustomerAssembler {
+    + toEntityFromResource(resource: object): Customer
+  }
+  class AdminAssembler {
+    + toEntityFromResource(resource: object): Admin
+  }
+}
+
+package "identity.presentation.components" {
+  class LoginForm {
+    - email: string
+    - password: string
+    + submitLogin(): void
+    + goToRegister(): void
+  }
+  class RegisterForm {
+    - name: string
+    - email: string
+    - password: string
+    + submitRegister(): void
+    + goToLogin(): void
+  }
+  class CustomerProfile {
+    - customer: Customer
+    - isEditing: boolean
+    + saveProfile(): void
+    + changePassword(): void
+    + logout(): void
+    + onMounted(): void
+  }
+  class AdminProfile {
+    - admin: Admin
+    - isEditing: boolean
+    + saveProfile(): void
+    + changePassword(): void
+    + logout(): void
+    + onMounted(): void
+  }
+}
+
+' ─────────────────────────────────────────────────────────
+' BOUNDED CONTEXT: wishlist
+' US007: Manage Wishlist
+' ─────────────────────────────────────────────────────────
+
+package "wishlist.domain.model" {
+  class Wishlist {
+    - id: string
+    - customerId: string
+    - items: WishlistItem[]
+    + addItem(product: Product): void
+    + removeItem(productId: string): void
+    + hasProduct(productId: string): boolean
+    + getItemCount(): number
+  }
+  class WishlistItem {
+    - product: Product
+    - addedAt: Date
+    + getFormattedDate(): string
+  }
+}
+
+package "wishlist.application" {
+  class wishlistStore {
+    - wishlist: Wishlist
+    + addToWishlist(product: Product): void
+    + removeFromWishlist(productId: string): void
+    + isInWishlist(productId: string): boolean
+    + clearWishlist(): void
+    + fetchWishlist(customerId: string): void
+  }
+}
+
+package "wishlist.presentation.components" {
+  class WishlistList {
+    - wishlist: Wishlist
+    + moveToCart(product: Product): void
+    + clearWishlist(): void
+    + onMounted(): void
+  }
+  class WishlistLineItem {
+    - item: WishlistItem
+    + emitMoveToCart(): void
+    + emitRemoveItem(): void
+    + moveToCart(): void <<event>>
+    + removeItem(): void <<event>>
+  }
+}
+
+' ─────────────────────────────────────────────────────────
+' BOUNDED CONTEXT: subscription
+' US001: Email Subscription Pop-up   US013: Footer Newsletter
+' ─────────────────────────────────────────────────────────
+
+package "subscription.domain.model" {
+  class Subscription {
+    - id: string
+    - email: string
+    - discountCode: string
+    - isActive: boolean
+    - subscribedAt: Date
+    + isFirstTimeSubscriber(): boolean
+    + getFormattedDate(): string
+  }
+  class DiscountCode {
+    - code: string
+    - percentage: number
+    - expiresAt: Date
+    + isExpired(): boolean
+    + getFormattedDiscount(): string
+  }
+}
+
+package "subscription.application" {
+  class subscriptionStore {
+    - subscription: Subscription
+    - hasSubscribed: boolean
+    - discountCode: DiscountCode
+    + subscribe(email: string): void
+    + isFirstVisit(): boolean
+    + markAsSubscribed(): void
+  }
+}
+
+package "subscription.infrastructure" {
+  class SubscriptionApi {
+    + subscribe(email: string): Promise
+    + validateDiscountCode(code: string): Promise
+  }
+  class SubscriptionAssembler {
+    + toEntityFromResource(resource: object): Subscription
+  }
+}
+
+package "subscription.presentation.components" {
+  class SubscriptionPopUp {
+    - subscription: Subscription
+    - email: string
+    - isVisible: boolean
+    + submit(): void
+    + dismiss(): void
+    + onMounted(): void
+  }
+  class NewsletterForm {
+    - subscription: Subscription
+    - email: string
+    + submit(): void
+    + emitSubscribed(): void
+    + subscribed(): void <<event>>
+  }
+}
+
+' ─────────────────────────────────────────────────────────
+' BOUNDED CONTEXT: shared
+' US002: Landing Page  US012: About Us  US013: Footer
+' US014: Language Switcher  US018: Mobile Responsive
+' ─────────────────────────────────────────────────────────
+
+package "shared.presentation.components" {
+  class Layout {
+    - drawerVisible: boolean
+    - isScrolled: boolean
+    + toggleDrawer(): void
+    + onScroll(): void
+    + onMounted(): void
+  }
+  class Navbar {
+    - cartItemCount: number
+    - wishlistItemCount: number
+    - isAuthenticated: boolean
+    - drawerVisible: boolean
+    + toggleDrawer(): void
+    + goToCart(): void
+    + goToWishlist(): void
+    + goToAccount(): void
+  }
+  class FooterContent {
+    ' quick nav, social links, FAQ, support
+  }
+  class LandingPage {
+    ' hero, featured products, promo banners, testimonials
+  }
+  class AboutUsContent {
+    ' brand mission, vision, values, images
+  }
+  class AnnouncementBar {
+    - message: string
+  }
+  class LanguageSwitcher {
+    ' binds $i18n.locale
+  }
+}
+
+class App
+
+' ─────────────────────────────────────────────────────────
+' RELATIONSHIPS
+' ─────────────────────────────────────────────────────────
+
+' catalog — domain
+Product --> Category
+Product --> Review
+ProductFilter ..> Product : filters
+
+' catalog — application
+catalogStore ..> "catalog.domain.model.Product" : uses
+catalogStore ..> "catalog.domain.model.Category" : uses
+catalogStore ..> "catalog.domain.model.ProductFilter" : uses
+catalogStore ..> "catalog.infrastructure.ProductApi" : uses
+catalogStore ..> "catalog.infrastructure.CategoryApi" : uses
+catalogStore ..> "catalog.infrastructure.ProductAssembler" : uses
+catalogStore ..> "catalog.infrastructure.CategoryAssembler" : uses
+
+' catalog — infrastructure
+ProductAssembler ..> "catalog.domain.model.Product" : creates
+CategoryAssembler ..> "catalog.domain.model.Category" : creates
+
+' catalog — presentation
+ProductList --> ProductItem : uses
+ProductItem --> Product : uses
+ProductDetail --> Product : uses
+ProductDetail --> Review : uses
+CategoryList --> CategoryItem : uses
+CategoryItem --> Category : uses
+ProductFilterBar --> ProductFilter : uses
+AdminProductList --> AdminProductItem : uses
+AdminProductItem --> Product : uses
+AdminProductForm --> Product : uses
+AdminCategoryList --> AdminCategoryItem : uses
+AdminCategoryItem --> Category : uses
+AdminCategoryForm --> Category : uses
+
+' cart — domain
+ShoppingCart --> CartItem
+CartItem --> Product
+
+' cart — application
+cartStore ..> "cart.domain.model.ShoppingCart" : uses
+cartStore ..> "cart.domain.model.CartItem" : uses
+
+' cart — presentation
+CartList --> ShoppingCart : uses
+CartList --> CartSummary : uses
+CartLineItem --> CartItem : uses
+CartSummary --> ShoppingCart : uses
+
+' checkout — domain
+Order --> OrderItem
+Order --> Address
+
+' checkout — application
+checkoutStore ..> "checkout.domain.model.Order" : uses
+checkoutStore ..> "checkout.infrastructure.OrderApi" : uses
+checkoutStore ..> "checkout.infrastructure.OrderAssembler" : uses
+
+' checkout — infrastructure
+OrderAssembler ..> "checkout.domain.model.Order" : creates
+
+' checkout — presentation
+CheckoutForm --> Address : uses
+CheckoutForm --> ShoppingCart : uses
+OrderConfirmation --> Order : uses
+OrderList --> OrderLineItem : uses
+OrderLineItem --> Order : uses
+
+' identity — application
+authStore ..> "identity.domain.model.Customer" : uses
+authStore ..> "identity.domain.model.Admin" : uses
+authStore ..> "identity.infrastructure.AuthApi" : uses
+authStore ..> "identity.infrastructure.CustomerAssembler" : uses
+authStore ..> "identity.infrastructure.AdminAssembler" : uses
+
+' identity — infrastructure
+CustomerAssembler ..> "identity.domain.model.Customer" : creates
+AdminAssembler ..> "identity.domain.model.Admin" : creates
+
+' identity — presentation
+CustomerProfile --> Customer : uses
+AdminProfile --> Admin : uses
+
+' wishlist — domain
+Wishlist --> WishlistItem
+WishlistItem --> Product
+
+' wishlist — application
+wishlistStore ..> "wishlist.domain.model.Wishlist" : uses
+wishlistStore ..> "wishlist.domain.model.WishlistItem" : uses
+
+' wishlist — presentation
+WishlistList --> Wishlist : uses
+WishlistLineItem --> WishlistItem : uses
+
+' subscription — domain
+Subscription --> DiscountCode
+
+' subscription — application
+subscriptionStore ..> "subscription.domain.model.Subscription" : uses
+subscriptionStore ..> "subscription.domain.model.DiscountCode" : uses
+subscriptionStore ..> "subscription.infrastructure.SubscriptionApi" : uses
+subscriptionStore ..> "subscription.infrastructure.SubscriptionAssembler" : uses
+
+' subscription — infrastructure
+SubscriptionAssembler ..> "subscription.domain.model.Subscription" : creates
+
+' subscription — presentation
+SubscriptionPopUp --> Subscription : uses
+NewsletterForm --> Subscription : uses
+
+' shared — todas las conexiones de Layout
+Layout --> Navbar : uses
+Layout --> FooterContent : uses
+Layout --> AnnouncementBar : uses
+Layout --> LanguageSwitcher : uses
+Layout --> LandingPage : uses
+Layout --> AboutUsContent : uses
+Layout --> SubscriptionPopUp : uses
+Layout --> "catalog.presentation.components.ProductList" : uses
+Layout --> "catalog.presentation.components.CategoryList" : uses
+Layout --> "cart.presentation.components.CartList" : uses
+Layout --> "wishlist.presentation.components.WishlistList" : uses
+Layout --> "checkout.presentation.components.CheckoutForm" : uses
+Layout --> "checkout.presentation.components.OrderList" : uses
+Layout --> "identity.presentation.components.LoginForm" : uses
+Layout --> catalogStore : uses
+Layout --> cartStore : uses
+Layout --> wishlistStore : uses
+Layout --> authStore : uses
+Navbar --> cartStore : uses
+Navbar --> wishlistStore : uses
+Navbar --> authStore : uses
+App --> Layout : uses
+
+@enduml
